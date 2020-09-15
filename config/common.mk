@@ -50,6 +50,10 @@ PRODUCT_COPY_FILES += \
     vendor/fuse/prebuilt/common/etc/permissions/privapp-permissions-fuse-product.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-fuse-product.xml \
     vendor/fuse/prebuilt/common/etc/permissions/privapp-permissions-elgoog.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-elgoog.xml
 
+# Bootanimation
+PRODUCT_COPY_FILES += \
+    vendor/fusion/bootanimation/bootanimation.zip:$(TARGET_COPY_OUT_PRODUCT)/media/bootanimation.zip
+
 # Set custom volume steps
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.media_vol_steps=30 \
