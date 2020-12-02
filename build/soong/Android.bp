@@ -1,6 +1,15 @@
 // LineageOS soong configs
 
 bootstrap_go_package {
+    name: "soong-hornbill",
+    pkgPath: "hornbill/soong/android",
+    srcs: [
+        "android/config.go",
+        "android/variable.go",
+    ],
+}
+
+bootstrap_go_package {
     name: "soong-hornbill-generator",
     pkgPath: "hornbill/soong/generator",
     deps: [
