@@ -1,6 +1,6 @@
 bootstrap_go_package {
-    name: "soong-fuse",
-    pkgPath: "fuse/soong/android",
+    name: "soong-hornbill",
+    pkgPath: "hornbill/soong/android",
     srcs: [
         "android/config.go",
         "android/variable.go",
@@ -8,8 +8,8 @@ bootstrap_go_package {
 }
 
 bootstrap_go_package {
-    name: "soong-fuse-generator",
-    pkgPath: "fuse/soong/generator",
+    name: "soong-hornbill-generator",
+    pkgPath: "hornbill/soong/generator",
     deps: [
         "blueprint",
         "blueprint-pathtools",
@@ -24,7 +24,7 @@ bootstrap_go_package {
     pluginFor: ["soong_build"],
 }
 
-fuse_generator {
+hornbill_generator {
     name: "generated_kernel_includes",
 
     // The headers make command

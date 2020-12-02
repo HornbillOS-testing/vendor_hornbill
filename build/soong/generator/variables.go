@@ -6,12 +6,12 @@ import (
 	"android/soong/android"
 )
 
-func fuseExpandVariables(ctx android.ModuleContext, in string) string {
-	fuseVars := ctx.Config().VendorConfig("fuseVarsPlugin")
+func hornbillExpandVariables(ctx android.ModuleContext, in string) string {
+	hornbillVars := ctx.Config().VendorConfig("hornbillVarsPlugin")
 
 	out, err := android.Expand(in, func(name string) (string, error) {
-		if fuseVars.IsSet(name) {
-			return fuseVars.String(name), nil
+		if hornbillVars.IsSet(name) {
+			return hornbillVars.String(name), nil
 		}
 		// This variable is not for us, restore what the original
 		// variable string will have looked like for an Expand

@@ -1,7 +1,7 @@
-FUSE_STATUS = 2.0
+HORNBILL_STATUS = 2.0
 
-ifndef FUSE_BUILD_TYPE
-    FUSE_BUILD_TYPE := Unofficial
+ifndef HORNBILL_BUILD_TYPE
+    HORNBILL_BUILD_TYPE := Unofficial
 endif
 
 ifneq ($(SIGNING_KEYS),)
@@ -9,31 +9,31 @@ ifneq ($(SIGNING_KEYS),)
 endif
 
 CURRENT_DEVICE := $(shell echo "$(TARGET_PRODUCT)" | cut -d'_' -f 2,3)
-LIST := $(shell cat vendor/fuse/fuse.devices)
+LIST := $(shell cat vendor/hornbill/hornbill.devices)
 
 ifeq ($(filter $(CURRENT_DEVICE), $(LIST)), $(CURRENT_DEVICE))
-    ifeq ($(filter-out Official OFFICIAL, $(FUSE_BUILD_TYPE)),)
-        ifeq ($(FUSE_BUILD_TYPE), Official)
-          BUILD_TYPE := Official
+    ifeq ($(filter-out BETA OFFICIAL, $(HORNBILL_BUILD_TYPE)),)
+        ifeq ($(HORNBILL_BUILD_TYPE), BETA)
+          BUILD_TYPE := BETA
         endif
-        ifeq ($(FUSE_BUILD_TYPE), OFFICIAL)
+        ifeq ($(HORNBILL_BUILD_TYPE), OFFICIAL)
           BUILD_TYPE := OFFICIAL
         endif
     endif
 else
-    ifeq ($(filter-out Official OFFICIAL, $(FUSE_BUILD_TYPE)),)
-      $(error "Invalid FUSE_BUILD_TYPE!")
+    ifeq ($(filter-out BETA OFFICIAL, $(HORNBILL_BUILD_TYPE)),)
+      $(error "Invalid HORNBILL_BUILD_TYPE!")
     endif
 endif
 
-TARGET_PRODUCT_SHORT := $(subst fuse_,,$(TARGET_PRODUCT))
+TARGET_PRODUCT_SHORT := $(subst hornbill_,,$(TARGET_PRODUCT))
 
-FUSE_VERSION := FusionOS-v$(FUSE_STATUS)-$(TARGET_PRODUCT_SHORT)-$(shell date -u +%Y%m%d)-$(FUSE_BUILD_TYPE)
+HORNBILL_VERSION := hornbill-v$(HORNBILL_STATUS)-$(TARGET_PRODUCT_SHORT)-$(shell date -u +%Y%m%d)-$(HORNBILL_BUILD_TYPE)
 
-FUSE_BRANDING_VERSION := $(FUSE_BUILD_TYPE)
+HORNBILL_BRANDING_VERSION := $(HORNBILL_BUILD_TYPE)
 
 PRODUCT_PROPERTY_OVERRIDES += \
-  ro.build.project=fuse \
-  ro.fuse.version=$(FUSE_VERSION) \
-  ro.fuse.status=$(FUSE_STATUS) \
-  ro.fuse.branding.version=$(FUSE_BRANDING_VERSION)
+  ro.build.project=hornbill \
+  ro.hornbill.version=$(HORNBILL_VERSION) \
+  ro.hornbill.status=$(HORNBILL_STATUS) \
+  ro.hornbill.branding.version=$(HORNBILL_BRANDING_VERSION)

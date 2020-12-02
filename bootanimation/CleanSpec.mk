@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Unlegacy-Android
+#
 # Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-# -----------------------------------------------------------------
-# FusionOS OTA update package
-
-FUSE_TARGET_PACKAGE := $(PRODUCT_OUT)/$(FUSE_VERSION).zip
-
-.PHONY: fuse
-fuse: $(INTERNAL_OTA_PACKAGE_TARGET)
-	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(FUSE_TARGET_PACKAGE)
-	@echo "Package Complete: $(FUSE_TARGET_PACKAGE)" >&2
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/obj/BOOTANIMATION)

@@ -1,4 +1,4 @@
-function __print_fuse_functions_help() {
+function __print_hornbill_functions_help() {
 cat <<EOF
 Additional FusionOS functions:
 - cout:            Changes directory to out.
@@ -57,7 +57,7 @@ function brunch()
 {
     breakfast $*
     if [ $? -eq 0 ]; then
-        mka fuse
+        mka hornbill
     else
         echo "No such item in brunch menu. Try 'breakfast'"
         return 1
@@ -69,9 +69,9 @@ function breakfast()
 {
     target=$1
     local variant=$2
-    FUSE_DEVICES_ONLY="true"
+    HORNBILL_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
-    for f in `/bin/ls vendor/fuse/vendorsetup.sh 2> /dev/null`
+    for f in `/bin/ls vendor/hornbill/vendorsetup.sh 2> /dev/null`
         do
             echo "including $f"
             . $f
@@ -92,7 +92,7 @@ function breakfast()
                 variant="userdebug"
             fi
 
-            lunch fuse_$target-$variant
+            lunch hornbill_$target-$variant
         fi
     fi
     return $?
@@ -103,7 +103,7 @@ alias bib=breakfast
 function eat()
 {
     if [ "$OUT" ] ; then
-        ZIPPATH=`ls -tr "$OUT"/fuse-*.zip | tail -1`
+        ZIPPATH=`ls -tr "$OUT"/hornbill-*.zip | tail -1`
         if [ ! -f $ZIPPATH ] ; then
             echo "Nothing to eat"
             return 1
@@ -117,7 +117,7 @@ function eat()
             done
             echo "Device Found.."
         fi
-        if (adb shell getprop ro.fuse.device | grep -q "$FUSE_BUILD"); then
+        if (adb shell getprop ro.hornbill.device | grep -q "$HORNBILL_BUILD"); then
             # if adbd isn't root we can't write to /cache/recovery/
             adb root
             sleep 1
@@ -133,7 +133,7 @@ EOF
             fi
             rm /tmp/command
         else
-            echo "The connected device does not appear to be $FUSE_BUILD, run away!"
+            echo "The connected device does not appear to be $HORNBILL_BUILD, run away!"
         fi
         return $?
     else
@@ -267,7 +267,7 @@ function gerritpush()
 
     local PROJECT_EXCLUSIONS=(
         "device_qcom_sepolicy"
-        "device_fuse_sepolicy"
+        "device_hornbill_sepolicy"
     );
 
     while getopts "tdb" OPTION; do
@@ -404,7 +404,7 @@ function installboot()
     sleep 1
     adb wait-for-online shell mount /system 2>&1 > /dev/null
     adb wait-for-online remount
-    if (adb shell getprop ro.fuse.device | grep -q "$FUSE_BUILD");
+    if (adb shell getprop ro.hornbill.device | grep -q "$HORNBILL_BUILD");
     then
         adb push $OUT/boot.img /cache/
         if [ -e "$OUT/system/lib/modules/*" ];
@@ -419,7 +419,7 @@ function installboot()
         adb shell rm -rf /cache/boot.img
         echo "Installation complete."
     else
-        echo "The connected device does not appear to be $FUSE_BUILD, run away!"
+        echo "The connected device does not appear to be $HORNBILL_BUILD, run away!"
     fi
 }
 
@@ -453,14 +453,14 @@ function installrecovery()
     sleep 1
     adb wait-for-online shell mount /system 2>&1 >> /dev/null
     adb wait-for-online remount
-    if (adb shell getprop ro.fuse.device | grep -q "$FUSE_BUILD");
+    if (adb shell getprop ro.hornbill.device | grep -q "$HORNBILL_BUILD");
     then
         adb push $OUT/recovery.img /cache/
         adb shell dd if=/cache/recovery.img of=$PARTITION
         adb shell rm -rf /cache/recovery.img
         echo "Installation complete."
     else
-        echo "The connected device does not appear to be $FUSE_BUILD, run away!"
+        echo "The connected device does not appear to be $HORNBILL_BUILD, run away!"
     fi
 }
 
@@ -493,8 +493,8 @@ function makerecipe() {
     if [ "$REPO_REMOTE" = "github" ]
     then
         pwd
-        fuseremote
-        git push fuse HEAD:refs/heads/'$1'
+        hornbillremote
+        git push hornbill HEAD:refs/heads/'$1'
     fi
     '
 }
@@ -516,15 +516,15 @@ function mergeaosptag()
   done
 
   whitelist=(
-    device_fuse_sepolicy
+    device_hornbill_sepolicy
     device_qcom_sepolicy
     external_json-c
     external_sony_boringssl-compat
     hardware_libhardware_legacy
-    hardware_fuse_interfaces
+    hardware_hornbill_interfaces
     hardware_qcom_power
     manifest
-    vendor_fuse
+    vendor_hornbill
     prebuilts_clang_host_linux-x86
     website
   )
@@ -598,7 +598,7 @@ function cmka() {
     if [ ! -z "$1" ]; then
         for i in "$@"; do
             case $i in
-                fuse|otapackage|systemimage)
+                hornbill|otapackage|systemimage)
                     mka installclean
                     mka $i
                     ;;
@@ -647,14 +647,14 @@ function pushOTA() {
     done
 
     build_date=$(grep ro\.build\.date\.utc $OUT/system/build.prop | cut -d= -f2);
-    device=$(grep ro\.fuse\.device $OUT/system/build.prop | cut -d= -f2);
-    file=$(ls -t ${OUT}/fuse_$device-10* | sed -n 2p);
+    device=$(grep ro\.hornbill\.device $OUT/system/build.prop | cut -d= -f2);
+    file=$(ls -t ${OUT}/hornbill_$device-10* | sed -n 2p);
     md5=$(md5sum $file | awk '{ print $1 }');
     build_type=$(echo $BUILD_TYPE | tr '[:upper:]' '[:lower:]');
     size=$(stat -c%s $file);
-    version=$(grep ro\.fuse\.status $OUT/system/build.prop | cut -d= -f2);
+    version=$(grep ro\.hornbill\.status $OUT/system/build.prop | cut -d= -f2);
     if [ -z $version ]; then
-        version=$(grep ro\.fuse\.status $OUT/vendor/build.prop | cut -d= -f2)
+        version=$(grep ro\.hornbill\.status $OUT/vendor/build.prop | cut -d= -f2)
     fi
     notes=""
 
@@ -727,7 +727,7 @@ function dopush()
         echo "Device Found."
     fi
 
-    if (adb shell getprop ro.fuse.device | grep -q "$FUSE_BUILD") || [ "$FORCE_PUSH" = "true" ];
+    if (adb shell getprop ro.hornbill.device | grep -q "$HORNBILL_BUILD") || [ "$FORCE_PUSH" = "true" ];
     then
     # retrieve IP and PORT info if we're using a TCP connection
     TCPIPPORT=$(adb devices \
@@ -845,7 +845,7 @@ EOF
     rm -f $OUT/.log
     return 0
     else
-        echo "The connected device does not appear to be $FUSE_BUILD, run away!"
+        echo "The connected device does not appear to be $HORNBILL_BUILD, run away!"
     fi
 }
 
@@ -858,13 +858,13 @@ alias cmkap='dopush cmka'
 
 function repopick() {
     T=$(gettop)
-    $T/vendor/fuse/build/tools/repopick.py $@
+    $T/vendor/hornbill/build/tools/repopick.py $@
 }
 
 function fixup_common_out_dir() {
     common_out_dir=$(get_build_var OUT_DIR)/target/common
     target_device=$(get_build_var TARGET_DEVICE)
-    if [ ! -z $FUSE_FIXUP_COMMON_OUT ]; then
+    if [ ! -z $HORNBILL_FIXUP_COMMON_OUT ]; then
         if [ -d ${common_out_dir} ] && [ ! -L ${common_out_dir} ]; then
             mv ${common_out_dir} ${common_out_dir}-${target_device}
             ln -s ${common_out_dir}-${target_device} ${common_out_dir}
@@ -889,7 +889,7 @@ if [ -d $(gettop)/prebuilts/snapdragon-llvm/toolchains ]; then
             export SDCLANG=true
             export SDCLANG_PATH=$(gettop)/prebuilts/snapdragon-llvm/toolchains/llvm-Snapdragon_LLVM_for_Android_4.0/prebuilt/linux-x86_64/bin
             export SDCLANG_PATH_2=$(gettop)/prebuilts/snapdragon-llvm/toolchains/llvm-Snapdragon_LLVM_for_Android_4.0/prebuilt/linux-x86_64/bin
-            export SDCLANG_LTO_DEFS=$(gettop)/vendor/fuse/build/core/sdllvm-lto-defs.mk
+            export SDCLANG_LTO_DEFS=$(gettop)/vendor/hornbill/build/core/sdllvm-lto-defs.mk
             ;;
     esac
 fi

@@ -1,2 +1,2 @@
 # Inherit common stuff
-$(call inherit-product, vendor/fuse/config/common.mk)
+$(call inherit-product, vendor/hornbill/config/common.mk)

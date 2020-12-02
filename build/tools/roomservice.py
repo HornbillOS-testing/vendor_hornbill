@@ -46,11 +46,11 @@ except ImportError:
 DEBUG = False
 default_manifest = ".repo/manifest.xml"
 
-custom_local_manifest = ".repo/local_manifests/fuse_manifest.xml"
-custom_default_revision = "11"
-custom_dependencies = "fuse.dependencies"
+custom_local_manifest = ".repo/local_manifests/hornbill_manifest.xml"
+custom_default_revision = "eleven"
+custom_dependencies = "hornbill.dependencies"
 org_manifest = "devices"  # leave empty if org is provided in manifest
-org_display = "Fusion-Devices"  # needed for displaying
+org_display = "HornbillOS-Devices"  # needed for displaying
 
 github_auth = None
 

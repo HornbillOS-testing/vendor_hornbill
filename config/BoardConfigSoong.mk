@@ -18,13 +18,13 @@ EXPORT_TO_SOONG := \
 # Documentation here:
 # https://github.com/LineageOS/android_build_soong/commit/8328367c44085b948c003116c0ed74a047237a69
 
-SOONG_CONFIG_NAMESPACES += fuseVarsPlugin
+SOONG_CONFIG_NAMESPACES += hornbillVarsPlugin
 
-SOONG_CONFIG_fuseVarsPlugin :=
+SOONG_CONFIG_hornbillVarsPlugin :=
 
 define addVar
-  SOONG_CONFIG_fuseVarsPlugin += $(1)
-  SOONG_CONFIG_fuseVarsPlugin_$(1) := $$(subst ",\",$$($1))
+  SOONG_CONFIG_hornbillVarsPlugin += $(1)
+  SOONG_CONFIG_hornbillVarsPlugin_$(1) := $$(subst ",\",$$($1))
 endef
 
 $(foreach v,$(EXPORT_TO_SOONG),$(eval $(call addVar,$(v))))

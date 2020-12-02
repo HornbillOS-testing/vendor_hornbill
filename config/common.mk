@@ -1,4 +1,4 @@
-include vendor/fuse/config/ProductConfigQcom.mk
+include vendor/hornbill/config/ProductConfigQcom.mk
 
 PRODUCT_SOONG_NAMESPACES += $(PATHMAP_SOONG_NAMESPACES)
 
@@ -12,15 +12,15 @@ endif
 
 # Backup Tool
 PRODUCT_COPY_FILES += \
-    vendor/fuse/prebuilt/common/bin/backuptool.sh:install/bin/backuptool.sh \
-    vendor/fuse/prebuilt/common/bin/backuptool.functions:install/bin/backuptool.functions \
-    vendor/fuse/prebuilt/common/bin/50-base.sh:system/addon.d/50-base.sh \
+    vendor/hornbill/prebuilt/common/bin/backuptool.sh:install/bin/backuptool.sh \
+    vendor/hornbill/prebuilt/common/bin/backuptool.functions:install/bin/backuptool.functions \
+    vendor/hornbill/prebuilt/common/bin/50-base.sh:system/addon.d/50-base.sh \
 
 ifeq ($(AB_OTA_UPDATER),true)
 PRODUCT_COPY_FILES += \
-    vendor/fuse/prebuilt/common/bin/backuptool_ab.sh:system/bin/backuptool_ab.sh \
-    vendor/fuse/prebuilt/common/bin/backuptool_ab.functions:system/bin/backuptool_ab.functions \
-    vendor/fuse/prebuilt/common/bin/backuptool_postinstall.sh:system/bin/backuptool_postinstall.sh
+    vendor/hornbill/prebuilt/common/bin/backuptool_ab.sh:system/bin/backuptool_ab.sh \
+    vendor/hornbill/prebuilt/common/bin/backuptool_ab.functions:system/bin/backuptool_ab.functions \
+    vendor/hornbill/prebuilt/common/bin/backuptool_postinstall.sh:system/bin/backuptool_postinstall.sh
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -46,13 +46,13 @@ PRODUCT_RESTRICT_VENDOR_FILES := false
 
 # FusionOS Common
 PRODUCT_COPY_FILES += \
-    vendor/fuse/prebuilt/common/etc/permissions/privapp-permissions-fuse.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-fuse.xml \
-    vendor/fuse/prebuilt/common/etc/permissions/privapp-permissions-fuse-product.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-fuse-product.xml \
-    vendor/fuse/prebuilt/common/etc/permissions/privapp-permissions-elgoog.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-elgoog.xml
+    vendor/hornbill/prebuilt/common/etc/permissions/privapp-permissions-hornbill.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-hornbill.xml \
+    vendor/hornbill/prebuilt/common/etc/permissions/privapp-permissions-hornbill-product.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hornbill-product.xml \
+    vendor/hornbill/prebuilt/common/etc/permissions/privapp-permissions-elgoog.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-elgoog.xml
 
 # Bootanimation
-PRODUCT_COPY_FILES += \
-    vendor/fuse/bootanimation/bootanimation.zip:$(TARGET_COPY_OUT_PRODUCT)/media/bootanimation.zip
+PRODUCT_PACKAGES += \
+    bootanimation.zip
 
 # Set custom volume steps
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -61,7 +61,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Power whitelist
 PRODUCT_COPY_FILES += \
-    vendor/fuse/config/permissions/custom-power-whitelist.xml:system/etc/sysconfig/custom-power-whitelist.xml
+    vendor/hornbill/config/permissions/custom-power-whitelist.xml:system/etc/sysconfig/custom-power-whitelist.xml
 
 # Clang
 ifeq ($(TARGET_USE_LATEST_CLANG),true)
@@ -87,14 +87,11 @@ ifneq ($(TARGET_BUILD_VARIANT),user)
     SELINUX_IGNORE_NEVERALLOWS := true
 endif
 
-# Overlays
-PRODUCT_PACKAGES += \
-    CustomConfigOverlay \
-    CustomLauncherOverlay \
-    CustomSettingsOverlay
+# Vendor overlays
+PRODUCT_PACKAGE_OVERLAYS += vendor/aosp/overlay
 
 # Packages
-include vendor/fuse/config/packages.mk
+include vendor/hornbill/config/packages.mk
 
 # Branding
-include vendor/fuse/config/branding.mk
+include vendor/hornbill/config/branding.mk
